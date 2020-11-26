@@ -34,7 +34,6 @@ const CardProgress: React.FC<IdataProgress> = (props) => {
     let endDate = moment(props.end * 1000).format('LL');
     let loadingDate = moment(props.loading * 1000).format('LL');
 
-
     return(
         <div className='process_list'>
             <div className="header">

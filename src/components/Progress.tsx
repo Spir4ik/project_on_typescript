@@ -4,9 +4,11 @@ import CardProgress from "./CardProgress";
 import {useQuery} from "@apollo/client";
 import {gql} from "apollo-boost";
 import iconSearch from '../assets/icon-search.svg'
+import iconUser from '../assets/icon-user.svg'
+import iconDropDown from '../assets/icon-dropDown.svg'
 
 interface client {
-    client(client: any): void
+    client: any
 }
 
 interface ITest {
@@ -22,8 +24,13 @@ interface ITest {
     loading: string
 }
 
+interface IGetRequestName {
+    firstName: string
+}
+
 interface ITestTwo {
     processList: ITest[]
+    currentUser: IGetRequestName
 }
 
 const TEST = gql`
@@ -40,13 +47,16 @@ const TEST = gql`
             end
             loading
     }
+        currentUser {
+            firstName
+    }
 }
 `;
-
 
 const Progress: React.FC<client> = (props) => {
     const {loading, error, data} = useQuery<ITestTwo>(TEST);
     const [searchCurrentList, setSearchCurrentList] = useState<string>('');
+    const [showDropDown, setShowDropDown] = useState<boolean>(false);
 
     const outputCurrentList = (searchCurrentList: string) => {
         if (searchCurrentList.search(/[A-Z]/g) !== -1 ||
@@ -72,13 +82,13 @@ const Progress: React.FC<client> = (props) => {
         setSearchCurrentList(e.target.value);
     };
 
-    // console.log(outputCurrentList(searchCurrentList));
-
     if (error) {return(<p>{error.message}</p>)}
+    console.log(props.client);
     return(
         <>
         {loading ? (<p>Loading... </p>) :
             (<div className='bg_color_progress'>
+
                 <SideBar />
 
                 <div className='search-by-number'>
@@ -90,11 +100,26 @@ const Progress: React.FC<client> = (props) => {
                                    aria-describedby="emailHelp"
                                    value={searchCurrentList}
                                    onChange={changeHandlerSearch}
-                                   placeholder={'Поиск...'}
+                                   placeholder={'Введите номер заявки...'}
                             />
                             <label htmlFor="exampleInputText"><img src={iconSearch} alt=""/></label>
                         </div>
                     </form>
+
+                    <div className="header-user-block">
+                        {data && <span><img src={iconUser} alt=""/>{data.currentUser.firstName}</span>}
+                        <div className='icon-show-window' onClick={(e) =>
+                            setShowDropDown(!showDropDown)
+                        }>
+                            <img src={iconDropDown} alt=""/>
+                        </div>
+                        {showDropDown && <div className="window-exit">
+
+                            <div className="triangle-up"> </div>
+
+                            <span>Выход</span>
+                        </div>}
+                    </div>
                 </div>
 
                     {data && outputCurrentList(searchCurrentList).map(({name, numberOfExecutions, averageLeadTime,

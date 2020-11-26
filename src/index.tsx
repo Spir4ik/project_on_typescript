@@ -4,7 +4,7 @@ import App from './App'
 import {ApolloProvider, ApolloClient,
     InMemoryCache, createHttpLink} from "@apollo/client";
 import {setContext} from "@apollo/client/link/context";
-import {BrowserRouter} from "react-router-dom";
+import {HashRouter} from "react-router-dom";
 
 
 export const createIsomorphLink = createHttpLink({
@@ -24,18 +24,17 @@ export const authLink: any = setContext((_:any, { headers }:any) => {
     }
 
     return getValue()
-})
+});
 
 export const client = new ApolloClient({
     cache: new InMemoryCache(),
     link: authLink.concat(createIsomorphLink)
 });
 
-
 ReactDOM.render(
     <ApolloProvider client={client}>
-        <BrowserRouter>
+        <HashRouter>
             <App />
-        </BrowserRouter>
+        </HashRouter>
     </ApolloProvider>
     , document.getElementById('root'));

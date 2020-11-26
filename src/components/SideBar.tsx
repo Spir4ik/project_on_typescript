@@ -1,26 +1,23 @@
-import React, {useState} from 'react'
-import iconMenuBtn from '../assets/icon-menuBtn.svg'
-import iconMenuBtnShow from '../assets/icon-menuBtsShow.svg'
+import React from 'react'
+import {Link} from "react-router-dom";
 import iconUsername from '../assets/icon-username.svg'
 import iconCommonData from '../assets/icon-commonData.svg'
 
 
 const SideBar: React.FC = () => {
-    const [isShow, setIsShow] = useState<boolean>(false);
-
-
     return(
         <div className="sidebar-content">
-            {isShow && <div className="sidebar-window">
-
-            </div>}
-            {!isShow && <a className='show-menu' onClick={() => setIsShow(!isShow)}>
+            <a className='show-menu'>
                 <span className='show-menu-bar'>Project on typescript</span>
-            </a>}
+            </a>
             <div className='sidebar-icon-list'>
                 <ul>
-                    <li><img src={iconUsername} alt=""/> Username</li>
-                    <li><img src={iconCommonData} alt=""/> Список процессов</li>
+                    <Link to='/edituser'>
+                        <li><img src={iconUsername} alt=""/> Username</li>
+                    </Link>
+                    <Link to='/process'>
+                        <li><img src={iconCommonData} alt=""/> Список процессов</li>
+                    </Link>
                 </ul>
             </div>
         </div>
