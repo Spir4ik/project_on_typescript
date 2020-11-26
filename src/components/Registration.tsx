@@ -50,7 +50,7 @@ const Registration: React.FC = () => {
                     password: password
                 }
             });
-            history.replace('/process');
+            window.location.replace(window.location.href + 'process')
         } catch (err) {
             alert(err)
         }

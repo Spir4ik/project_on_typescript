@@ -3,6 +3,11 @@ import SideBar from "./SideBar";
 import {useQuery, useMutation} from "@apollo/client";
 import {gql} from "apollo-boost";
 import {useHistory} from "react-router";
+import eyeInvisible from '../assets/eye-invisible.svg'
+import iconConfirm from '../assets/icon-confirmation.svg'
+import iconInTheProcess from '../assets/icon-inTheProcess.svg'
+import questionCircle from '../assets/question-circle.svg'
+import vector from '../assets/Vector.svg'
 
 const currentU = gql`
    query {
@@ -56,10 +61,76 @@ const EditUser: React.FC = () => {
     const [password, setPassword] = useState<string>('');
     const [passwordTwo, setPasswordTwo] = useState<string>('');
     const [userId, setUserId] = useState<number>(null);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showPasswordTwo, setShowPasswordTwo] = useState(false);
     let history = useHistory();
 
 
     const [edit] = useMutation(editUser);
+
+    const testFunc = () => {
+        if (typeof password === 'undefined') {
+            return(
+                <img src={questionCircle} alt=""/>
+            )
+        }
+        if (password.length >= 8 &&
+            password.search(/[A-Z]/g) !== -1 &&
+            password.search(/[a-z]/i) !== -1 &&
+            password.search(/[0-9]/) !== -1 &&
+            password.search(/[!@#$%^&*]/) !== - 1) {
+            return(
+                <img src={vector} alt=""/>
+            )
+        }
+        return(
+            <img src={questionCircle} alt=""/>
+        )
+    };
+
+    const validPassword = () => {
+        if (password.length >= 8 &&
+            password.search(/[A-Z]/g) !== -1 &&
+            password.search(/[a-z]/i) !== -1 &&
+            password.search(/[0-9]/) !== -1 &&
+            password.search(/[!@#$%^&*]/) !== - 1) {
+            return(
+                <div className="window edit-page" style={{display: 'none'}}> </div>
+            )
+        }
+        return(
+            <div className="window edit-page" style={{display: 'display'}}>
+                <div className="pointer">
+                </div>
+                <div className='valid_password'>
+                    {password.length < 8 && <p><img src={iconInTheProcess} alt=""/>
+                        Содержит 8 символов</p>}
+                    {password.length >= 8 && <p><img src={iconConfirm} alt=""/>
+                        Содержит 8 символов</p>}
+
+                    {password.search(/[A-Z]/g) === -1 && <p><img src={iconInTheProcess} alt=""/>
+                        латинские строчные буквы (A–Z)</p>}
+                    {password.search(/[A-Z]/g) !== -1 && <p><img src={iconConfirm} alt=""/>
+                        латинские строчные буквы (A–Z)</p>}
+
+                    {password.search(/[a-z]/i) === -1 && <p><img src={iconInTheProcess} alt=""/>
+                        латинские строчные буквы (a–z)</p>}
+                    {password.search(/[a-z]/i) !== -1 && <p><img src={iconConfirm} alt=""/>
+                        латинские строчные буквы (a–z)</p>}
+
+                    {password.search(/[0-9]/) !== -1 && <p><img src={iconConfirm} alt=""/>
+                        цифры (0-9)</p>}
+                    {password.search(/[0-9]/) === -1 && <p><img src={iconInTheProcess} alt=""/>
+                        цифры (0-9)</p>}
+
+                    {password.search(/[!@#$%^&*]/) !== - 1 && <p><img src={iconConfirm} alt=""/>
+                        неалфавитные символы (!, $, #, % и т.д.)</p>}
+                    {password.search(/[!@#$%^&*]/) === - 1 && <p><img src={iconInTheProcess} alt=""/>
+                        неалфавитные символы (!, $, #, % и т.д.)</p>}
+                </div>
+            </div>
+        )
+    };
 
     const renderBtn = () => {
         if (password) {
@@ -67,7 +138,11 @@ const EditUser: React.FC = () => {
                 <button type="submit"
                         className="btn btn-primary"
                         disabled={!password ||
-                        !passwordTwo || password.length < 8}
+                        !passwordTwo || password.length < 8 ||
+                        password.search(/[A-Z]/g) === -1 ||
+                        password.search(/[a-z]/i) === -1 ||
+                        password.search(/[0-9]/) === -1 ||
+                        password.search(/[!@#$%^&*]/) === - 1}
                         onClick={async (event) => {
                             event.preventDefault();
 
@@ -84,7 +159,6 @@ const EditUser: React.FC = () => {
                                     password: password
                                 }
                             });
-                            // window.location.replace('http://localhost:3030/#/');
                             history.replace('/');
                             window.location.reload();
                         }}
@@ -156,23 +230,33 @@ const EditUser: React.FC = () => {
                     </div>
                     <div className="form-group">
                         <label htmlFor="exampleInputPassword1">Новый пароль</label>
-                        <input type='password'
+                        <input type={showPassword ? 'text' : 'password'}
                                className="form-control password-class"
                                id="exampleInputPassword1"
                                onChange={(e) => setPassword(e.target.value)}
                                value={password}
                                placeholder={'Не задано'}
                         />
+                        <p className="password-control eye-icon-editPage2">{testFunc()} </p>
+                        <p className="password-control first-icon eye-icon-editPage"
+                           onClick={() => setShowPassword(!showPassword)}>
+                            <img src={eyeInvisible} alt=""/>
+                        </p>
+                        {password && validPassword()}
                     </div>
                     <div className="form-group">
                         <label htmlFor="exampleInputPassword2">Повторите пароль</label>
-                        <input type='password'
+                        <input type={showPasswordTwo ? 'text' : 'password'}
                                className="form-control password-class"
                                id="exampleInputPassword2"
                                onChange={(e) => setPasswordTwo(e.target.value)}
                                value={passwordTwo}
                                placeholder={'Не задано'}
                         />
+                        <p className="password-control eye-icon-editPage2"
+                           onClick={() => setShowPasswordTwo(!showPasswordTwo)}>
+                            <img src={eyeInvisible} alt=""/>
+                        </p>
                     </div>
                 </form>
             </div>

@@ -10,9 +10,6 @@ const cssLoaders = extra => {
     const loaders = [
         {
             loader: MiniCssExtractPlugin.loader,
-            // options: {
-            //     hmr: isDev
-            // },
         },
         "css-loader"
     ];

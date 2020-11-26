@@ -23,15 +23,6 @@ const Authorization: React.FC<{client: any}>= (props) => {
     });
     let history = useHistory();
 
-    useEffect(() => {
-        // setTimeout(() => {
-        //     let currentUrl = window.location.href;
-        //     if (window.location.href === currentUrl) {
-        //         localStorage.removeItem('token');
-        //     }
-        // }, 1000)
-    });
-
 
     const changeHandlerEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value)
@@ -50,12 +41,12 @@ const Authorization: React.FC<{client: any}>= (props) => {
                     password: password
                 }
             });
-            history.replace('/process')
+            window.location.replace(window.location.href + 'process')
         } catch (e) {
             alert(e)
         }
     };
-
+    console.log(history);
     return(
         <div className='bg_color_auth'>
             <p>Project on typescript</p>
