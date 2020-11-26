@@ -1,8 +1,9 @@
-import React, {useState} from 'react'
+import React, {useState, useRef, useEffect} from 'react'
 import SideBar from "./SideBar";
 import CardProgress from "./CardProgress";
 import {useQuery} from "@apollo/client";
 import {gql} from "apollo-boost";
+import {useHistory} from "react-router";
 import iconSearch from '../assets/icon-search.svg'
 import iconUser from '../assets/icon-user.svg'
 import iconDropDown from '../assets/icon-dropDown.svg'
@@ -57,6 +58,18 @@ const Progress: React.FC<client> = (props) => {
     const {loading, error, data} = useQuery<ITestTwo>(TEST);
     const [searchCurrentList, setSearchCurrentList] = useState<string>('');
     const [showDropDown, setShowDropDown] = useState<boolean>(false);
+    let history = useHistory();
+    // const refDivIconShow = useRef();
+    // const refIconShow = useRef();
+    //
+    // useEffect(() => {
+    //     document.addEventListener('click', (event) => {
+    //         if (event.target !== refDivIconShow.current)
+    //         {
+    //             setShowDropDown(false);
+    //         }
+    //     })
+    // });
 
     const outputCurrentList = (searchCurrentList: string) => {
         if (searchCurrentList.search(/[A-Z]/g) !== -1 ||
@@ -82,8 +95,11 @@ const Progress: React.FC<client> = (props) => {
         setSearchCurrentList(e.target.value);
     };
 
+    const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+        setShowDropDown(!showDropDown);
+    };
+
     if (error) {return(<p>{error.message}</p>)}
-    console.log(props.client);
     return(
         <>
         {loading ? (<p>Loading... </p>) :
@@ -108,16 +124,19 @@ const Progress: React.FC<client> = (props) => {
 
                     <div className="header-user-block">
                         {data && <span><img src={iconUser} alt=""/>{data.currentUser.firstName}</span>}
-                        <div className='icon-show-window' onClick={(e) =>
-                            setShowDropDown(!showDropDown)
-                        }>
-                            <img src={iconDropDown} alt=""/>
+                        <div className='icon-show-window' onClick={handleClick}>
+                            <img src={iconDropDown} alt="" />
                         </div>
                         {showDropDown && <div className="window-exit">
 
                             <div className="triangle-up"> </div>
 
-                            <span>Выход</span>
+                            <span onClick={(e) => {
+                                localStorage.removeItem('token');
+                                history.push('/');
+                                window.location.reload();
+                            }
+                            }>Выход</span>
                         </div>}
                     </div>
                 </div>

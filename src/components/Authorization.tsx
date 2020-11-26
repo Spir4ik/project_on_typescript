@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 import {Link} from "react-router-dom";
 import {gql} from "apollo-boost";
 import {useMutation} from "@apollo/client/";
+import {useHistory} from "react-router-dom";
 
 
 const LOGIN_MUTATION = gql`
@@ -12,10 +13,6 @@ const LOGIN_MUTATION = gql`
   }
 `;
 
-// interface cli {
-//     client: any
-// }
-
 const Authorization: React.FC<{client: any}>= (props) => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -24,14 +21,15 @@ const Authorization: React.FC<{client: any}>= (props) => {
             localStorage.setItem('token', data.login.token);
         }
     });
+    let history = useHistory();
 
     useEffect(() => {
-        if (window.location.href === 'http://localhost:3030/#/') {
-             localStorage.removeItem('token');
-            console.log(localStorage.getItem('token'))
-        }
-        // localStorage.removeItem('token')
-        // console.log(localStorage.getItem('token'))
+        // setTimeout(() => {
+        //     let currentUrl = window.location.href;
+        //     if (window.location.href === currentUrl) {
+        //         localStorage.removeItem('token');
+        //     }
+        // }, 1000)
     });
 
 
@@ -51,14 +49,12 @@ const Authorization: React.FC<{client: any}>= (props) => {
                     email: email,
                     password: password
                 }
-            })
-            window.location.replace('http://localhost:3030/#/process')
+            });
+            history.replace('/process')
         } catch (e) {
-            console.error(e)
+            alert(e)
         }
     };
-
-    console.log(props.client);
 
     return(
         <div className='bg_color_auth'>

@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import SideBar from "./SideBar";
 import {useQuery, useMutation} from "@apollo/client";
 import {gql} from "apollo-boost";
+import {useHistory} from "react-router";
 
 const currentU = gql`
    query {
@@ -55,26 +56,10 @@ const EditUser: React.FC = () => {
     const [password, setPassword] = useState<string>('');
     const [passwordTwo, setPasswordTwo] = useState<string>('');
     const [userId, setUserId] = useState<number>(null);
+    let history = useHistory();
+
 
     const [edit] = useMutation(editUser);
-
-    // const handelSubmit = async (event: React.FormEvent) => {
-    //     event.preventDefault();
-    //     try {
-    //         await edit ({
-    //             variables: {
-    //                 id: userId,
-    //                 email: email,
-    //                 firstName: name,
-    //                 secondName: secondName,
-    //                 // password: password
-    //             }
-    //         });
-    //         window.location.reload()
-    //     } catch (e) {
-    //         console.error(e)
-    //     }
-    // };
 
     const renderBtn = () => {
         if (password) {
@@ -99,7 +84,8 @@ const EditUser: React.FC = () => {
                                     password: password
                                 }
                             });
-                            window.location.replace('http://localhost:3030/#/');
+                            // window.location.replace('http://localhost:3030/#/');
+                            history.replace('/');
                             window.location.reload();
                         }}
                 >
