@@ -159,6 +159,7 @@ const EditUser: React.FC = () => {
                                     password: password
                                 }
                             });
+                            localStorage.removeItem('token');
                             history.replace('/');
                             window.location.reload();
                         }}
