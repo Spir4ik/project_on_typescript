@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {Link} from "react-router-dom";
 import {gql} from "apollo-boost";
 import {useMutation} from "@apollo/client/";
@@ -36,6 +36,15 @@ const Registration: React.FC = () => {
         }
     });
 
+    useEffect(() => {
+        if (localStorage.getItem('token')) {
+            history.push('/process');
+        }
+        addEventListener("popstate",function(e){
+            window.location.reload()
+        });
+    });
+
     const dataValid = async (event: React.FormEvent) => {
         event.preventDefault();
         if (password !== passwordTwo) {
@@ -50,7 +59,7 @@ const Registration: React.FC = () => {
                     password: password
                 }
             });
-            history.replace('/process');
+            history.replace('/process')
         } catch (err) {
             alert(err)
         }

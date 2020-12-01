@@ -13,7 +13,7 @@ const LOGIN_MUTATION = gql`
   }
 `;
 
-const Authorization: React.FC<{client: any}>= (props) => {
+const Authorization: React.FC= (props) => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [login] = useMutation(LOGIN_MUTATION, {
@@ -22,6 +22,16 @@ const Authorization: React.FC<{client: any}>= (props) => {
         }
     });
     let history = useHistory();
+
+
+    useEffect(() => {
+        if (localStorage.getItem('token')) {
+            history.push('/process');
+        }
+        addEventListener("popstate",function(e){
+            window.location.reload()
+        });
+    });
 
 
     const changeHandlerEmail = (e: React.ChangeEvent<HTMLInputElement>) => {

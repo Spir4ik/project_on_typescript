@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react'
+import React, {useState} from 'react'
 import SideBar from "./SideBar";
 import CardProgress from "./CardProgress";
 import {useQuery} from "@apollo/client";
@@ -7,10 +7,6 @@ import {useHistory} from "react-router";
 import iconSearch from '../assets/icon-search.svg'
 import iconUser from '../assets/icon-user.svg'
 import iconDropDown from '../assets/icon-dropDown.svg'
-
-interface client {
-    client: any
-}
 
 interface ITest {
     id: string
@@ -54,22 +50,11 @@ const TEST = gql`
 }
 `;
 
-const Progress: React.FC<client> = (props) => {
+const Progress: React.FC = (props) => {
     const {loading, error, data} = useQuery<ITestTwo>(TEST);
     const [searchCurrentList, setSearchCurrentList] = useState<string>('');
     const [showDropDown, setShowDropDown] = useState<boolean>(false);
     let history = useHistory();
-    // const refDivIconShow = useRef();
-    // const refIconShow = useRef();
-    //
-    // useEffect(() => {
-    //     document.addEventListener('click', (event) => {
-    //         if (event.target !== refDivIconShow.current)
-    //         {
-    //             setShowDropDown(false);
-    //         }
-    //     })
-    // });
 
     const outputCurrentList = (searchCurrentList: string) => {
         if (searchCurrentList.search(/[A-Z]/g) !== -1 ||
