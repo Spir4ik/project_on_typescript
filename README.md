@@ -14,8 +14,8 @@ After cloning, run:
 npm install 
 ```
 
-And finally, start the application:
-
+And finally open directory server, start the application:
+ 
 ```bash
 npm run dev
 ```
